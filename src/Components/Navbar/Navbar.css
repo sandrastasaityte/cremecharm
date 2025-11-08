@@ -1,0 +1,27 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: #fff3f3;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.logo {
+  display: flex;
+  align-items: center;
+}
+.logo img {
+  width: 40px;
+  margin-right: 0.5rem;
+}
+.logout-btn {
+  padding: 0.5rem 1rem;
+  background: #ff6b81;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.logout-btn:hover {
+  background: #ff4c61;
+}
