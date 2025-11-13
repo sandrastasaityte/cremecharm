@@ -11,14 +11,17 @@ const Add = () => {
     name: "",
     description: "",
     price: "",
-    category: "Cupcake",
+    category: "Cupcakes & Mini Cakes",
   });
+  const [loading, setLoading] = useState(false);
 
   const onChangeHandler = (e) =>
     setData({ ...data, [e.target.name]: e.target.value });
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
+    if (!image) return toast.error("Please upload an image");
+
     const formData = new FormData();
     formData.append("name", data.name);
     formData.append("description", data.description);
@@ -27,15 +30,18 @@ const Add = () => {
     formData.append("image", image);
 
     try {
-      const res = await axios.post(`${url}/api/food/add`, formData);
+      setLoading(true);
+      const res = await axios.post(`${url}/api/products`, formData);
       if (res.data.success) {
         toast.success(res.data.message);
-        setData({ name: "", description: "", price: "", category: "Salad" });
+        setData({ name: "", description: "", price: "", category: "Cupcakes & Mini Cakes" });
         setImage(null);
       } else toast.error(res.data.message);
     } catch (err) {
       toast.error("Server error");
-      console.error(err);
+      console.error(err.response?.data || err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -55,6 +61,7 @@ const Add = () => {
             id="image"
             hidden
             onChange={(e) => setImage(e.target.files[0])}
+            accept="image/*"
             required
           />
         </div>
@@ -94,7 +101,6 @@ const Add = () => {
             Special Ingredients / Flavors
           </option>
         </select>
-
         <input
           type="number"
           name="price"
@@ -103,7 +109,9 @@ const Add = () => {
           placeholder="Price"
           required
         />
-        <button type="submit">Add Cake</button>
+        <button type="submit" disabled={loading}>
+          {loading ? "Adding..." : "Add Cake"}
+        </button>
       </form>
     </div>
   );
